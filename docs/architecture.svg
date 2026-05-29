@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .t   { fill:#0f172a; font-size:16px; font-weight:700; text-anchor:middle; }
+      .s   { fill:#475569; font-size:12.5px; text-anchor:middle; }
+      .xs  { fill:#64748b; font-size:11px; text-anchor:middle; }
+      .lbl { fill:#64748b; font-size:12px; font-style:italic; text-anchor:middle; }
+      .ln  { stroke:#475569; stroke-width:2; fill:none; }
+      .h1  { fill:#0f172a; font-size:27px; font-weight:800; text-anchor:middle; }
+      .h2  { fill:#475569; font-size:14px; text-anchor:middle; }
+      .ft  { fill:#334155; font-size:13px; font-style:italic; text-anchor:middle; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1600" fill="#ffffff"/>
+
+  <text class="h1" x="800" y="52">alertward — guarded incident-triage agent for agentic ops</text>
+  <text class="h2" x="800" y="84">The planner proposes, code decides. Destructive remediation can never auto-run, and every step is audited.</text>
+
+  <!-- Row A: Alerts -> Triage -> Planner -->
+  <rect x="150" y="150" width="360" height="120" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text class="t" x="330" y="186">Alerts</text>
+  <text class="s" x="330" y="210">Splunk: saved-search · webhook · HEC</text>
+  <text class="xs" x="330" y="232">offline: synthetic alert stream</text>
+
+  <rect x="620" y="150" width="360" height="120" rx="10" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+  <text class="t" x="800" y="186">Triage</text>
+  <text class="s" x="800" y="210">correlate alerts → incidents</text>
+  <text class="xs" x="800" y="232">classify severity + category</text>
+
+  <rect x="1090" y="150" width="360" height="120" rx="10" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+  <text class="t" x="1270" y="186">Planner (Backend)</text>
+  <text class="s" x="1270" y="210">Stub | Gemini | Anthropic | Ollama</text>
+  <text class="xs" x="1270" y="232">proposes ONE action per incident</text>
+
+  <line class="ln" x1="510" y1="210" x2="620" y2="210" marker-end="url(#arr)"/>
+  <line class="ln" x1="980" y1="210" x2="1090" y2="210" marker-end="url(#arr)"/>
+
+  <!-- Planner down to ActionGuard -->
+  <line class="ln" x1="1270" y1="270" x2="1270" y2="360" marker-end="url(#arr)"/>
+  <text class="lbl" x="1340" y="320">proposed action</text>
+
+  <!-- ActionGuard (the core) -->
+  <rect x="340" y="360" width="920" height="150" rx="12" fill="#ecfdf5" stroke="#059669" stroke-width="3"/>
+  <text class="t" x="800" y="398" fill="#065f46">ActionGuard — code decides the verdict (the planner never does)</text>
+  <rect x="372" y="420" width="270" height="68" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1"/>
+  <text class="s" x="507" y="446" fill="#065f46">1 · target scope</text>
+  <text class="xs" x="507" y="466">deny: unknown_target</text>
+  <rect x="665" y="420" width="270" height="68" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1"/>
+  <text class="s" x="800" y="446" fill="#065f46">2 · risk class</text>
+  <text class="xs" x="800" y="466">read_only / state_change / destructive</text>
+  <rect x="958" y="420" width="270" height="68" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1"/>
+  <text class="s" x="1093" y="446" fill="#065f46">3 · auto budget</text>
+  <text class="xs" x="1093" y="466">deny: auto_budget_exceeded</text>
+
+  <!-- fan-out to 3 outcomes -->
+  <line class="ln" x1="640" y1="510" x2="360" y2="610" marker-end="url(#arr)"/>
+  <line class="ln" x1="800" y1="510" x2="800" y2="610" marker-end="url(#arr)"/>
+  <line class="ln" x1="980" y1="510" x2="1255" y2="610" marker-end="url(#arr)"/>
+
+  <!-- allow_auto (green) -->
+  <rect x="110" y="612" width="450" height="150" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2.5"/>
+  <text class="t" x="335" y="650" fill="#065f46">allow_auto → execute</text>
+  <text class="s" x="335" y="676">read-only ops auto-run</text>
+  <text class="xs" x="335" y="700">splunk_search · get_dashboard · tail_logs</text>
+  <text class="xs" x="335" y="722">(real Splunk REST in production)</text>
+
+  <!-- needs_approval (amber) -->
+  <rect x="580" y="612" width="440" height="150" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+  <text class="t" x="800" y="650" fill="#92400e">needs_approval → human</text>
+  <text class="s" x="800" y="676">state_change ops never auto-run</text>
+  <text class="xs" x="800" y="700">routed to a person to approve</text>
+
+  <!-- denied (red) -->
+  <rect x="1040" y="612" width="450" height="150" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2.5"/>
+  <text class="t" x="1265" y="650" fill="#b91c1c">denied → blocked</text>
+  <text class="s" x="1265" y="676">destructive + unknown ops refused</text>
+  <text class="xs" x="1265" y="700">destructive_op · unknown_target</text>
+  <text class="xs" x="1265" y="722">· auto_budget_exceeded (closed union)</text>
+
+  <!-- Audit band -->
+  <rect x="110" y="820" width="1380" height="70" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+  <text class="t" x="800" y="848" fill="#92400e">Audit trail — one flushed JSONL record at every step</text>
+  <text class="s" x="800" y="872" fill="#92400e">plan · decision · execute · deny&#160;&#160;→&#160;&#160;runs/triage.jsonl  (replayable for security review)</text>
+
+  <line class="ln" x1="800" y1="890" x2="800" y2="940" marker-end="url(#arr)"/>
+
+  <!-- Outputs -->
+  <rect x="320" y="940" width="430" height="92" rx="9" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+  <text class="t" x="535" y="976">Ops report</text>
+  <text class="s" x="535" y="1000">ranked incidents + actions taken / denied</text>
+
+  <rect x="850" y="940" width="430" height="92" rx="9" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+  <text class="t" x="1065" y="976">Streamlit dashboard</text>
+  <text class="s" x="1065" y="1000">incidents color-coded by guard outcome</text>
+
+  <text class="ft" x="800" y="1090">Guardrails are code, not prompts — the verdict comes from the action's intrinsic risk class and a target allowlist, not from anything the model says.</text>
+</svg>

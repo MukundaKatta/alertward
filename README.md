@@ -17,6 +17,12 @@ action auto-runs, waits for a human, or is refused is decided in code, from the
 action's intrinsic risk class and a target allowlist. A model cannot talk its
 way past the guard because it never gets to set the verdict.
 
+## Architecture
+
+![alertward architecture: alerts are correlated into incidents, a planner (Stub, Gemini, Anthropic, or Ollama) proposes one action per incident, and ActionGuard decides the verdict in code through three checks (target scope, risk class, auto budget). Only allow_auto read-only actions execute; state_change routes to a human; destructive or unknown actions are denied. Every step writes a JSONL audit record, and results feed an ops report and a Streamlit dashboard.](docs/architecture.png)
+
+The planner only ever *proposes*. Whether an action auto-runs, waits for a human, or is refused is decided in `guardrails.py` from the action's intrinsic risk class and a target allowlist, and every step is written to a replayable JSONL audit trail.
+
 ## The guarded loop
 
 ```
