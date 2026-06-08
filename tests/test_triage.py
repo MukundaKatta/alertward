@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import _bootstrap  # noqa: F401  (side effect: puts src/ on sys.path)
 from alertward.alerts import sample_alert_stream
 from alertward.triage import correlate
 

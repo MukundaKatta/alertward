@@ -4,7 +4,7 @@ A guarded, audited incident-triage agent for agentic ops. The planner proposes,
 **code decides**, destructive remediation can never auto-run, and every step is
 written to a replayable JSONL audit trail.
 
-[![tests](https://img.shields.io/badge/tests-offline-green)](#run-the-tests)
+[![ci](https://github.com/MukundaKatta/alertward/actions/workflows/ci.yml/badge.svg)](https://github.com/MukundaKatta/alertward/actions/workflows/ci.yml)
 [![python](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -58,14 +58,30 @@ fourth denied for budget, and the audit step counts.
 
 ## Run the tests
 
+The suite is fully offline and deterministic. The guard tests are the proof of
+the safety property: a planner that proposes `restart_service` on every incident
+gets every proposal denied and nothing executed.
+
+There are two equivalent ways to run it.
+
+**Standard library only — no install, no dependencies:**
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+This path needs nothing beyond CPython (3.10+). The tests put `src/` on the
+import path themselves, so a bare checkout works.
+
+**With pytest** (richer output, fixtures):
+
 ```bash
 pip install -e ".[dev]"
 python -m pytest -q
 ```
 
-The suite is fully offline and deterministic. The guard tests are the proof of
-the safety property: a planner that proposes `restart_service` on every incident
-gets every proposal denied and nothing executed.
+Both runners exercise the same real code: the guard, correlation, the pipeline,
+the audit trail, the report renderer, and the CLI.
 
 ## Backends
 
@@ -117,10 +133,14 @@ src/alertward/
   pipeline.py    the guarded plan-decide-execute loop
   report.py      ops-ready text report
   cli.py         `alertward` command
-tests/           fully offline, deterministic
+  py.typed       PEP 561 marker (the package ships inline type hints)
+tests/           fully offline, deterministic (pytest and stdlib unittest)
 examples/demo.py offline demo
 app.py           Streamlit dashboard
 ```
+
+The package is fully type-hinted and ships a `py.typed` marker, so type
+checkers (mypy, pyright) honour its annotations when you depend on it.
 
 ## License
 
