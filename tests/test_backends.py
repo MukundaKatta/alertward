@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import _bootstrap  # noqa: F401  (side effect: puts src/ on sys.path)
 from alertward.actions import classify_op
 from alertward.alerts import Incident
 from alertward.backends import (

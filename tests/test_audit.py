@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import _bootstrap  # noqa: F401  (side effect: puts src/ on sys.path)
 from alertward.audit import AuditLog
 
 
